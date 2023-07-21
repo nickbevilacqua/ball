@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flaming Green Ball</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="flamingBallCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('flamingBallCanvas');
+    const ctx = canvas.getContext('2d');
+    const ballRadius = 30;
+    const ballColor = '#00FF00';
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const getRandomNumber = (min, max) => Math.random() * (max - min) + min;
+
+    // Randomize initial ball position and speed
+    let ballX = getRandomNumber(ballRadius, canvas.width - ballRadius);
+    let ballY = getRandomNumber(ballRadius, canvas.height - ballRadius);
+    let ballSpeedX = getRandomNumber(-5, 5);
+    let ballSpeedY = getRandomNumber(-5, 5);
+
+    const drawBall = () => {
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+      ctx.fillStyle = ballColor;
+      ctx.fill();
+      ctx.closePath();
+    };
+
+    const updateBallPosition = () => {
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+
+      if (ballX + ballRadius >= canvas.width || ballX - ballRadius <= 0) {
+        ballSpeedX = -ballSpeedX;
+      }
+
+      if (ballY + ballRadius >= canvas.height || ballY - ballRadius <= 0) {
+        ballSpeedY = -ballSpeedY;
+      }
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBall();
+      updateBallPosition();
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  </script>
+</body>
+</html>
